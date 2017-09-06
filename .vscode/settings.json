@@ -1,0 +1,15 @@
+{
+    "workbench.colorTheme": "Dracula",  // Install from npm or vs extensions
+    "workbench.iconTheme": "material-icon-theme", // Install from npm or vs extensions
+    "window.zoomLevel": 0,  //warning this will make your window bigger so edit based on preference (set to 0 for no zoom)
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "workbench.startupEditor": "newUntitledFile",
+    "editor.renderIndentGuides": false,
+    "prettier.eslintIntegration": true,
+    "prettier.singleQuote": true,
+    "editor.renderWhitespace": "boundary",
+    "editor.trimAutoWhitespace": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.tabSize": 2,
+    "files.eol": "\n"   // will set your IDE to use LF and not CRLF by default for new files
+}
