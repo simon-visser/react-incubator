@@ -8,13 +8,19 @@ class Navbar extends React.Component {
         <div className="container-fluid">
           <div className="navbar-header">
             <Link className="navbar-brand" to="/">
-              WebSiteName
+              Comtelect
             </Link>
           </div>
           <ul className="nav navbar-nav">
             <li>
-              <Link to="/page2">Home</Link>
+              <Link to="/order">Place Order</Link>
             </li>
+            <li>
+              <Link to="/suppliers">Place Order</Link>
+            </li>
+            {/* <li>
+              <Link to="/suppliers/345">Place Order</Link>
+            </li> */}
           </ul>
         </div>
       </nav>

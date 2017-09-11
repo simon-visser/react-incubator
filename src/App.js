@@ -8,7 +8,9 @@ class App extends Component {
     return (
       <div className="App container">
         <Navbar />
+        {/* Navbar contains the links to route us around the page */}
         <Main />
+        {/* Main will display the components referred to by our routes */}
       </div>
     );
   }
