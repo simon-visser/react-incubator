@@ -8,12 +8,11 @@ class SupplierDisplay extends React.Component {
       name: '',
       city: '',
       reference: '',
-      hidden: false,
+      hidden: true,
     };
 
     this.focus = this.focus.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,24 +33,21 @@ class SupplierDisplay extends React.Component {
     this.firstInput.focus();
   }
 
-  hide() {
-    this.setState({ hidden: true });
+  hide(value, callback) {
+    this.setState({ hidden: value || false }, callback); // It's the callback ho-down 🤠
   }
-
-  // handleSubmit(event) {
-  //   // HTML: PATCH THE NEW VALUE (or put this event in suppliers.js)
-  //   event.preventDefault();
-  // }
 
   render() {
     return (
       <form
-        onSubmit={event =>
+        onSubmit={event => {
           this.props.onSave(event, {
             name: this.state.name,
             city: this.state.city,
             reference: this.state.reference,
-          })}
+          });
+        }}
+        hidden={this.state.hidden}
       >
         <div className="form-group">
           <label htmlFor="supplierName">Supplier Name </label>
@@ -92,7 +88,16 @@ class SupplierDisplay extends React.Component {
           />
         </div>
 
-        <input type="submit" value="Save" className="btn btn-primary" />
+        <div className="btn-group" role="group" aria-label="...">
+          <input type="submit" value="Save" className="btn btn-primary" />
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => this.hide(true)}
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     );
   }

@@ -22,35 +22,32 @@ function SupplierList(props) {
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <div className="btn-group" role="group" aria-label="...">
-          <button
-            type="button"
-            className="btn btn-default"
-            onClick={() => props.pageFn(-1)}
-          >
-            <span aria-hidden="true">&larr;</span> Older
-          </button>
-          <button
-            type="button"
-            className="btn btn-default"
-            onClick={() => props.onCreate(1)}
-          >
-            Create
-          </button>
-          <button
-            type="button"
-            className="btn btn-default"
-            onClick={() => props.pageFn(1)}
-          >
-            Newer <span aria-hidden="true">&rarr;</span>
-          </button>
-        </div>
-
-        {/* <li>
-            <button>
-              <span className="glyphicon glyphicon-plus" aria-hidden="true" />
+        <h4>
+          Suppliers
+          <div className="btn-group pull-right" role="group" aria-label="...">
+            <button
+              type="button"
+              className="btn btn-default"
+              onClick={() => props.pageFn(-1)}
+            >
+              <span aria-hidden="true">&larr;</span> Older
             </button>
-          </li> */}
+            <button
+              type="button"
+              className="btn btn-default"
+              onClick={() => props.onCreate(1)}
+            >
+              Create
+            </button>
+            <button
+              type="button"
+              className="btn btn-default"
+              onClick={() => props.pageFn(1)}
+            >
+              Newer <span aria-hidden="true">&rarr;</span>
+            </button>
+          </div>
+        </h4>
       </div>
 
       <ul className="list-group">{listItems}</ul>
