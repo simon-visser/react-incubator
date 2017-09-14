@@ -5,7 +5,7 @@ function SingleSupplier(props) {
   const { value, click, className } = props;
   return (
     <a
-      href="#select"
+      href="#s"
       className={className}
       onClick={() => {
         click(value);

@@ -1,37 +1,74 @@
+import ComicStockAPI from 'comic_stockweb_api';
 import React from 'react';
-// import PropTypes from 'prop-types';
 import SupplierDisplay from './supplier-display';
 import SupplierList from './supplier-list';
 import { PropSuppliers } from './supplier-props';
 
-const mockData = [
-  {
-    id: 345,
-    name: '1s',
-    city: 'd',
-    reference: 'f',
-  },
-  {
-    id: 6,
-    name: 'Barfro',
-    city: 'Day',
-    reference: '56X',
-  },
-];
-
-const data = mockData;
-
 class Suppliers extends React.Component {
   constructor(props) {
+    // UI Initialization
     super(props);
-    this.state = { selected: -1, selectedIndex: -1 };
+    this.state = { selectedIndex: -1, data: [[]], page: 0 };
+    this.focusInput = this.focusInput.bind(this);
+    // Data Initialization
+    const api = new ComicStockAPI.SuppliersApi();
+    api.suppliersGet((error, data) => {
+      const xy = data;
+      const array = [];
+      while (xy.length) {
+        array.push(xy.splice(0, 10));
+      }
+      this.setState({ data: array });
+    });
+  }
+
+  focusInput() {
+    this.supplierInput.focus();
   }
 
   handleClick(value) {
-    this.setState({
-      selected: value.id,
-      selectedIndex: data.indexOf(value),
-    });
+    this.setState(
+      {
+        selectedIndex: this.state.data[this.state.page].indexOf(value),
+      },
+      () => {
+        console.warn('done');
+      },
+    );
+  }
+
+  handleCreate(value) {
+    this.setState(
+      // First we deselect the value
+      {
+        selectedIndex: -1,
+      },
+      // Then we can focus the input
+      () => {
+        this.focusInput();
+      },
+    );
+  }
+
+  page(incrementor) {
+    let x = this.state.page + incrementor;
+    const y = this.state.data.length - 1;
+    if (x > y) {
+      x = y;
+    }
+    if (x < 0) {
+      x = 0;
+    }
+    this.setState({ page: x });
+  }
+
+  handleSave(event, element) {
+    const api = new ComicStockAPI.SuppliersApi();
+    if (this.state.selectedIndex > -1) {
+      api.suppliersPatch({}, (error, data, response) => {});
+    } else {
+    }
+    event.preventDefault();
   }
 
   render() {
@@ -39,14 +76,22 @@ class Suppliers extends React.Component {
       <div>
         {/* Where our list is displayed, as well as the source of change in -selected supplier- */}
         <SupplierList
-          selected={this.state.selected}
-          onClick={val => {
-            this.handleClick(val);
-          }}
-          data={data}
+          selected={this.state.selectedIndex}
+          onCreate={val => this.handleCreate(val)}
+          onClick={val => this.handleClick(val)}
+          pageFn={val => this.page(val)}
+          data={this.state.data[this.state.page]}
         />
         {/* Where our -selected- state is consumed, as well as supplier displayed. */}
-        <SupplierDisplay data={data[this.state.selectedIndex]} />
+        <SupplierDisplay
+          ref={input => {
+            console.warn(input);
+            this.supplierInput = input;
+          }}
+          data={this.state.data[this.state.page][this.state.selectedIndex]}
+          onSave={(ev, el) => this.handleSave(ev, el)}
+          disabled={this.state.selectedIndex > -1}
+        />
       </div>
     );
   }
