@@ -37,9 +37,14 @@ class SupplierDisplay extends React.Component {
     this.setState({ hidden: value || false }, callback); // It's the callback ho-down 🤠
   }
 
+  delete() {
+    this.props.onDelete();
+  }
+
   render() {
     return (
       <form
+        className="col-md-6"
         onSubmit={event => {
           this.props.onSave(event, {
             name: this.state.name,
@@ -89,13 +94,21 @@ class SupplierDisplay extends React.Component {
         </div>
 
         <div className="btn-group" role="group" aria-label="...">
-          <input type="submit" value="Save" className="btn btn-primary" />
+          <input type="submit" value="Save" className="btn btn-success" />
           <button
             type="button"
-            className="btn btn-danger"
+            className="btn btn-info"
             onClick={() => this.hide(true)}
           >
             Cancel
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => this.delete()}
+          >
+            <span className="glyphicon glyphicon-trash" aria-hidden="true" />
+            Delete
           </button>
         </div>
       </form>

@@ -20,37 +20,39 @@ function SupplierList(props) {
     />
   ));
   return (
-    <div className="panel panel-default">
-      <div className="panel-heading">
-        <h4>
-          Suppliers
-          <div className="btn-group pull-right" role="group" aria-label="...">
-            <button
-              type="button"
-              className="btn btn-default"
-              onClick={() => props.pageFn(-1)}
-            >
-              <span aria-hidden="true">&larr;</span> Older
-            </button>
-            <button
-              type="button"
-              className="btn btn-default"
-              onClick={() => props.onCreate(1)}
-            >
-              Create
-            </button>
-            <button
-              type="button"
-              className="btn btn-default"
-              onClick={() => props.pageFn(1)}
-            >
-              Newer <span aria-hidden="true">&rarr;</span>
-            </button>
-          </div>
-        </h4>
-      </div>
+    <div className="col-md-6">
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h4>
+            Suppliers
+            <div className="btn-group pull-right" role="group" aria-label="...">
+              <button
+                type="button"
+                className="btn btn-default"
+                onClick={() => props.pageFn(-1)}
+              >
+                <span aria-hidden="true">&larr;</span> Previous
+              </button>
+              <button
+                type="button"
+                className="btn btn-default"
+                onClick={() => props.onCreate(1)}
+              >
+                Create
+              </button>
+              <button
+                type="button"
+                className="btn btn-default"
+                onClick={() => props.pageFn(1)}
+              >
+                Next <span aria-hidden="true">&rarr;</span>
+              </button>
+            </div>
+          </h4>
+        </div>
 
-      <ul className="list-group">{listItems}</ul>
+        <ul className="list-group">{listItems}</ul>
+      </div>
     </div>
   );
 }

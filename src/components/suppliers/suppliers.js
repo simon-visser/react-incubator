@@ -38,6 +38,7 @@ class Suppliers extends React.Component {
     const array = [];
     while (xy.length) {
       array.push(xy.splice(0, this.entriesPerPage));
+      console.warn(array);
     }
     this.setState({ data: array });
   }
@@ -99,6 +100,59 @@ class Suppliers extends React.Component {
     this.setState({ page: x });
   }
 
+  handleDelete() {
+    if (this.state.selectedIndex === -1) {
+      this.showAlert('Please select a supplier.', 'info');
+      return;
+    }
+    const api = new ComicStockAPI.SuppliersApi();
+    const supplierId = this.state.data[this.state.page][
+      this.state.selectedIndex
+    ].id;
+    api.suppliersDelete(supplierId, error => {
+      if (!error) {
+        let newData = this.unpackData();
+        delete newData[
+          this.state.page * this.entriesPerPage + this.state.selectedIndex
+        ];
+        newData = newData.filter(e => e);
+        this.updateData(newData);
+        // this.setSelected(-1);
+      }
+    });
+  }
+
+  setSelected(index) {
+    const stateObject = {};
+    const totalEntries =
+      (this.state.data.length - 1) * this.entriesPerPage +
+      this.state.data[this.state.data.length - 1].length;
+    const totalPages = Math.floor(totalEntries / this.entriesPerPage);
+    if (typeof index === 'number') {
+      if (index >= totalEntries) {
+        const e = { message: 'Index is out of bounds.' };
+        throw e;
+      }
+      stateObject.page = Math.floor(index / this.entriesPerPage);
+      stateObject.selectedIndex = index % this.entriesPerPage;
+    } else if (typeof index === 'object' && index.length === 2) {
+      if (
+        index[0] > totalPages ||
+        index[1] > this.entriesPerPage ||
+        index[0] * this.entriesPerPage + index[1] >= totalEntries
+      ) {
+        const e = { message: 'Index is out of bounds.' };
+        throw e;
+      }
+      stateObject.page = index[0];
+      stateObject.selectedIndex = index[1];
+    } else {
+      const e = { message: 'Invalid input.' };
+      throw e;
+    }
+    this.setState(stateObject);
+  }
+
   handleSave(event, element) {
     event.preventDefault();
     const api = new ComicStockAPI.SuppliersApi();
@@ -154,7 +208,7 @@ class Suppliers extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="row">
         {/* Where our list is displayed, as well as the source of change in -selected supplier- */}
         <SupplierList
           selected={this.state.selectedIndex}
@@ -171,6 +225,7 @@ class Suppliers extends React.Component {
           data={this.state.data[this.state.page][this.state.selectedIndex]}
           onSave={(ev, el) => this.handleSave(ev, el)}
           disabled={this.state.selectedIndex > -1}
+          onDelete={() => this.handleDelete()}
         />
         <AlertContainer
           ref={a => {
