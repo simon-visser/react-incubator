@@ -4,6 +4,7 @@ import React from 'react';
 import AlertContainer from 'react-alert';
 import SupplierDisplay from './supplier-display';
 import SupplierList from './supplier-list';
+import SupplierSearch from './supplier-search';
 import { PropSuppliers } from './supplier-props';
 
 // TODO: Split suppliers display and suppliers list into different components,
@@ -138,14 +139,15 @@ class Suppliers extends React.Component {
     transition: 'scale',
   };
 
+  searchEngine = null;
+
   updateData(newData) {
     console.warn(newData);
-    let search = new JsSearch.Search('name');
-    search.addIndex('city');
-    search.addIndex('reference');
-    search.addDocuments(newData);
-    console.warn(search.search('awe'));
-    console.warn(search);
+    this.searchEngine = new JsSearch.Search('name');
+    this.searchEngine.addIndex('city');
+    this.searchEngine.addIndex('reference');
+    this.searchEngine.addDocuments(newData);
+    console.warn(this.searchEngine.search('awe'));
     const xy = newData;
     const array = [];
     while (xy.length) {
@@ -230,13 +232,7 @@ class Suppliers extends React.Component {
     return (
       <div className="container-fluid panel panel-default">
         <div className="row panel-heading">
-          <div className="input-group col-md-12 pull-right">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search for..."
-            />
-          </div>
+          <SupplierSearch />
         </div>
         <div className="row panel-body">
           {/* Where our list is displayed, as well as the source of change in -selected supplier- */}

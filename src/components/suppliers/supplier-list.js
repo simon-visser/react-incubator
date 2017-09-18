@@ -23,32 +23,38 @@ function SupplierList(props) {
     <div className="col-md-6">
       <div className="">
         <div className="row">
-          <h4>
-            Suppliers
-            <div className="btn-group pull-right" role="group" aria-label="...">
-              <button
-                type="button"
-                className="btn btn-default"
-                onClick={() => props.pageFn(-1)}
+          <div className="well well-sm">
+            <h4>
+              Suppliers
+              <div
+                className="btn-group pull-right"
+                role="group"
+                aria-label="..."
               >
-                <span aria-hidden="true">&larr;</span> Previous
-              </button>
-              <button
-                type="button"
-                className="btn btn-default"
-                onClick={() => props.onCreate(1)}
-              >
-                Create
-              </button>
-              <button
-                type="button"
-                className="btn btn-default"
-                onClick={() => props.pageFn(1)}
-              >
-                Next <span aria-hidden="true">&rarr;</span>
-              </button>
-            </div>
-          </h4>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={() => props.pageFn(-1)}
+                >
+                  <span aria-hidden="true">&larr;</span> Previous
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={() => props.onCreate(1)}
+                >
+                  Create
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={() => props.pageFn(1)}
+                >
+                  Next <span aria-hidden="true">&rarr;</span>
+                </button>
+              </div>
+            </h4>
+          </div>
         </div>
 
         <ul className="list-group row">{listItems}</ul>
