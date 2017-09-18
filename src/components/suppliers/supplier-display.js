@@ -9,6 +9,7 @@ class SupplierDisplay extends React.Component {
       city: '',
       reference: '',
       hidden: true,
+      confirm: true,
     };
 
     this.focus = this.focus.bind(this);
@@ -17,7 +18,15 @@ class SupplierDisplay extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { name, city, reference } = nextProps.data || ['', '', ''];
-    this.setState({ name, city, reference });
+    this.setState({ name, city, reference, confirm: true });
+  }
+
+  getInfoClassName() {
+    let classBuilder = 'btn btn-warning';
+    if (this.state.confirm) {
+      classBuilder += ' hidden';
+    }
+    return classBuilder;
   }
 
   handleInputChange(event) {
@@ -35,6 +44,13 @@ class SupplierDisplay extends React.Component {
 
   hide(value, callback) {
     this.setState({ hidden: value || false }, callback); // It's the callback ho-down 🤠
+  }
+
+  confirmDelete(val) {
+    if (!val && !this.state.confirm) {
+      this.delete();
+    }
+    this.setState({ confirm: val });
   }
 
   delete() {
@@ -104,8 +120,15 @@ class SupplierDisplay extends React.Component {
           </button>
           <button
             type="button"
+            className={this.getInfoClassName()}
+            onClick={() => this.confirmDelete(true)}
+          >
+            Oops!
+          </button>
+          <button
+            type="button"
             className="btn btn-danger"
-            onClick={() => this.delete()}
+            onClick={() => this.confirmDelete(false)}
           >
             <span className="glyphicon glyphicon-trash" aria-hidden="true" />
             Delete

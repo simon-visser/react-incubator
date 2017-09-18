@@ -2,6 +2,7 @@
   "name": "incubator",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://simon-visser.github.io/react-incubator",
   "dependencies": {
     "bootstrap": "^3.3.7",
     "comic_stockweb_api": "git+https://github.com/simon-visser/comicstock-swagger-js.git",
@@ -17,7 +18,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "eslint": "^4.6.1",
@@ -25,6 +28,7 @@
     "eslint-config-prettier": "^2.4.0",
     "eslint-plugin-css-modules": "^2.7.5",
     "eslint-plugin-prettier": "^2.2.0",
+    "gh-pages": "^1.0.0",
     "prettier": "^1.6.1"
   }
 }

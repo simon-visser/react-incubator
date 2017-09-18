@@ -4,12 +4,17 @@ import AlertContainer from 'react-alert';
 import SupplierDisplay from './supplier-display';
 import SupplierList from './supplier-list';
 import { PropSuppliers } from './supplier-props';
+import JsSearch from 'js-search';
 
 class Suppliers extends React.Component {
   constructor(props) {
     // UI Initialization
     super(props);
-    this.state = { selectedIndex: -1, data: [[]], page: 0 };
+    this.state = {
+      selectedIndex: -1,
+      data: [[]],
+      page: 0,
+    };
     this.focusInput = this.focusInput.bind(this);
     // Data Initialization
     const api = new ComicStockAPI.SuppliersApi();
@@ -18,8 +23,6 @@ class Suppliers extends React.Component {
     });
   }
 
-  entriesPerPage = 10;
-
   unpackData() {
     const newArray = this.state.data.slice();
     let anotherArray = [];
@@ -27,7 +30,7 @@ class Suppliers extends React.Component {
     let index = 0;
     while (index < newArray.length) {
       anotherArray = anotherArray.concat(newArray[index]);
-      index++;
+      index += 1;
     }
 
     return anotherArray;
@@ -38,7 +41,6 @@ class Suppliers extends React.Component {
     const array = [];
     while (xy.length) {
       array.push(xy.splice(0, this.entriesPerPage));
-      console.warn(array);
     }
     this.setState({ data: array });
   }
@@ -117,7 +119,7 @@ class Suppliers extends React.Component {
         ];
         newData = newData.filter(e => e);
         this.updateData(newData);
-        // this.setSelected(-1);
+        this.setSelected(-1);
       }
     });
   }
@@ -150,8 +152,11 @@ class Suppliers extends React.Component {
       const e = { message: 'Invalid input.' };
       throw e;
     }
+    if (stateObject.page < 0) stateObject.page = 0;
     this.setState(stateObject);
   }
+
+  entriesPerPage = 10;
 
   handleSave(event, element) {
     event.preventDefault();
@@ -189,9 +194,12 @@ class Suppliers extends React.Component {
         ] = data;
       } else {
         dataArray.push(data);
+        console.warn(dataArray);
         dataArray.sort((a, b) => {
-          if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-          if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+          if (a.name && b.name) {
+            if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+            if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+          }
           return 0;
         });
         indexSavingValue = dataArray.indexOf(data);
@@ -208,31 +216,42 @@ class Suppliers extends React.Component {
 
   render() {
     return (
-      <div className="row">
-        {/* Where our list is displayed, as well as the source of change in -selected supplier- */}
-        <SupplierList
-          selected={this.state.selectedIndex}
-          onCreate={val => this.handleCreate(val)}
-          onClick={val => this.handleClick(val)}
-          pageFn={val => this.page(val)}
-          data={this.state.data[this.state.page]}
-        />
-        {/* Where our -selected- state is consumed, as well as supplier displayed. */}
-        <SupplierDisplay
-          ref={input => {
-            this.supplierInput = input;
-          }}
-          data={this.state.data[this.state.page][this.state.selectedIndex]}
-          onSave={(ev, el) => this.handleSave(ev, el)}
-          disabled={this.state.selectedIndex > -1}
-          onDelete={() => this.handleDelete()}
-        />
-        <AlertContainer
-          ref={a => {
-            this.alertComponent = a;
-          }}
-          {...this.alertOptions}
-        />
+      <div className="container-fluid">
+        <div className="row">
+          <div className="input-group col-md-6 pull-right">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search for..."
+            />
+          </div>
+        </div>
+        <div className="row">
+          {/* Where our list is displayed, as well as the source of change in -selected supplier- */}
+          <SupplierList
+            selected={this.state.selectedIndex}
+            onCreate={val => this.handleCreate(val)}
+            onClick={val => this.handleClick(val)}
+            pageFn={val => this.page(val)}
+            data={this.state.data[this.state.page]}
+          />
+          {/* Where our -selected- state is consumed, as well as supplier displayed. */}
+          <SupplierDisplay
+            ref={input => {
+              this.supplierInput = input;
+            }}
+            data={this.state.data[this.state.page][this.state.selectedIndex]}
+            onSave={(ev, el) => this.handleSave(ev, el)}
+            disabled={this.state.selectedIndex > -1}
+            onDelete={() => this.handleDelete()}
+          />
+          <AlertContainer
+            ref={a => {
+              this.alertComponent = a;
+            }}
+            {...this.alertOptions}
+          />
+        </div>
       </div>
     );
   }
