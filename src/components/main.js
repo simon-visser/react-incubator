@@ -4,6 +4,7 @@ import About from './about';
 import Suppliers from './suppliers/suppliers';
 
 class Main extends React.Component {
+  // TODO: Add 404 page
   render() {
     return (
       <div>

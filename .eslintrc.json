@@ -7,10 +7,10 @@
     * This source code is licensed under the MIT license found in the
     * LICENSE.txt file in the root directory of this source tree.
     */
-   
+
    // ESLint configuration
    // http://eslint.org/docs/user-guide/configuring
-   
+
      "parser": "babel-eslint",
      "extends": [
        "airbnb",
@@ -32,6 +32,7 @@
        "browser": true
      },
      "rules": {
+      "linebreak-style": ["error", "windows"],
        // `js` and `jsx` are common extensions
        // `mjs` is for `universal-router` only, for now
        "import/extensions": [

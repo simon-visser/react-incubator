@@ -6,6 +6,8 @@ import SupplierList from './supplier-list';
 import { PropSuppliers } from './supplier-props';
 import JsSearch from 'js-search';
 
+// TODO: Split suppliers display and suppliers list into different components,
+// each referred to seperately with their own routes.
 class Suppliers extends React.Component {
   constructor(props) {
     // UI Initialization
@@ -20,107 +22,6 @@ class Suppliers extends React.Component {
     const api = new ComicStockAPI.SuppliersApi();
     api.suppliersGet((error, data) => {
       this.updateData(data);
-    });
-  }
-
-  unpackData() {
-    const newArray = this.state.data.slice();
-    let anotherArray = [];
-
-    let index = 0;
-    while (index < newArray.length) {
-      anotherArray = anotherArray.concat(newArray[index]);
-      index += 1;
-    }
-
-    return anotherArray;
-  }
-
-  updateData(newData) {
-    const xy = newData;
-    const array = [];
-    while (xy.length) {
-      array.push(xy.splice(0, this.entriesPerPage));
-    }
-    this.setState({ data: array });
-  }
-
-  alertOptions = {
-    offset: 14,
-    position: 'bottom left',
-    theme: 'dark',
-    time: 5000,
-    transition: 'scale',
-  };
-
-  showAlert(alertText, succ) {
-    this.alertComponent.show(alertText, {
-      time: 5000,
-      type: succ,
-    });
-  }
-
-  focusInput() {
-    this.supplierInput.focus();
-  }
-
-  handleClick(value) {
-    this.setState(
-      {
-        selectedIndex: this.state.data[this.state.page].indexOf(value),
-      },
-      () => {
-        this.supplierInput.hide(false);
-      },
-    );
-  }
-
-  handleCreate(value) {
-    this.setState(
-      // First we deselect the value
-      {
-        selectedIndex: -1,
-      },
-      // Then we can focus the input
-      () => {
-        this.supplierInput.hide(false, () => {
-          this.focusInput();
-        });
-      },
-    );
-  }
-
-  page(incrementor) {
-    let x = this.state.page + incrementor;
-    const y = this.state.data.length - 1;
-    if (x > y) {
-      x = y;
-    }
-    if (x < 0) {
-      x = 0;
-    }
-    this.setState({ page: x });
-  }
-
-  handleDelete() {
-    if (this.state.selectedIndex === -1) {
-      this.showAlert('Please select a supplier.', 'info');
-      return;
-    }
-    const api = new ComicStockAPI.SuppliersApi();
-    const supplierId = this.state.data[this.state.page][
-      this.state.selectedIndex
-    ].id;
-    api.suppliersDelete(supplierId, error => {
-      if (!error) {
-        let newData = this.unpackData();
-        delete newData[
-          this.state.page * this.entriesPerPage + this.state.selectedIndex
-        ];
-        newData = newData.filter(e => e);
-        this.updateData(newData);
-        this.setSelected(-1);
-      }
     });
   }
 
@@ -154,6 +55,109 @@ class Suppliers extends React.Component {
     }
     if (stateObject.page < 0) stateObject.page = 0;
     this.setState(stateObject);
+  }
+
+  handleDelete() {
+    if (this.state.selectedIndex === -1) {
+      this.showAlert('Please select a supplier.', 'info');
+      return;
+    }
+    const api = new ComicStockAPI.SuppliersApi();
+    const supplierId = this.state.data[this.state.page][
+      this.state.selectedIndex
+    ].id;
+    api.suppliersDelete(supplierId, error => {
+      if (!error) {
+        let newData = this.unpackData();
+        delete newData[
+          this.state.page * this.entriesPerPage + this.state.selectedIndex
+        ];
+        newData = newData.filter(e => e);
+        this.updateData(newData);
+        this.setSelected(-1);
+      }
+    });
+  }
+
+  page(incrementor) {
+    let x = this.state.page + incrementor;
+    const y = this.state.data.length - 1;
+    if (x > y) {
+      x = y;
+    }
+    if (x < 0) {
+      x = 0;
+    }
+    this.setState({ page: x });
+  }
+
+  handleCreate() {
+    this.setState(
+      // First we deselect the value
+      {
+        selectedIndex: -1,
+      },
+      // Then we can focus the input
+      () => {
+        this.supplierInput.hide(false, () => {
+          this.focusInput();
+        });
+      },
+    );
+  }
+
+  handleClick(value) {
+    this.setState(
+      {
+        selectedIndex: this.state.data[this.state.page].indexOf(value),
+      },
+      () => {
+        this.supplierInput.hide(false);
+      },
+    );
+  }
+
+  focusInput() {
+    this.supplierInput.focus();
+  }
+
+  // TODO: Move to own file
+  showAlert(alertText, succ) {
+    // TODO: Enumerate succ argument
+    this.alertComponent.show(alertText, {
+      time: 5000,
+      type: succ,
+    });
+  }
+  // TODO: Move to own file
+  alertOptions = {
+    offset: 14,
+    position: 'bottom left',
+    theme: 'dark',
+    time: 5000,
+    transition: 'scale',
+  };
+
+  updateData(newData) {
+    const xy = newData;
+    const array = [];
+    while (xy.length) {
+      array.push(xy.splice(0, this.entriesPerPage));
+    }
+    this.setState({ data: array });
+  }
+
+  unpackData() {
+    const newArray = this.state.data.slice();
+    let anotherArray = [];
+
+    let index = 0;
+    while (index < newArray.length) {
+      anotherArray = anotherArray.concat(newArray[index]);
+      index += 1;
+    }
+
+    return anotherArray;
   }
 
   entriesPerPage = 10;
