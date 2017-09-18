@@ -21,8 +21,8 @@ function SupplierList(props) {
   ));
   return (
     <div className="col-md-6">
-      <div className="panel panel-default">
-        <div className="panel-heading">
+      <div className="">
+        <div className="row">
           <h4>
             Suppliers
             <div className="btn-group pull-right" role="group" aria-label="...">
@@ -51,7 +51,7 @@ function SupplierList(props) {
           </h4>
         </div>
 
-        <ul className="list-group">{listItems}</ul>
+        <ul className="list-group row">{listItems}</ul>
       </div>
     </div>
   );

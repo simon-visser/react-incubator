@@ -6,6 +6,7 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "comic_stockweb_api": "git+https://github.com/simon-visser/comicstock-swagger-js.git",
+    "js-search": "^1.4.2",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-alert": "^2.3.0",

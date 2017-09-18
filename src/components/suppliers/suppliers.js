@@ -1,10 +1,10 @@
+import * as JsSearch from 'js-search';
 import ComicStockAPI from 'comic_stockweb_api';
 import React from 'react';
 import AlertContainer from 'react-alert';
 import SupplierDisplay from './supplier-display';
 import SupplierList from './supplier-list';
 import { PropSuppliers } from './supplier-props';
-import JsSearch from 'js-search';
 
 // TODO: Split suppliers display and suppliers list into different components,
 // each referred to seperately with their own routes.
@@ -139,11 +139,19 @@ class Suppliers extends React.Component {
   };
 
   updateData(newData) {
+    console.warn(newData);
+    let search = new JsSearch.Search('name');
+    search.addIndex('city');
+    search.addIndex('reference');
+    search.addDocuments(newData);
+    console.warn(search.search('awe'));
+    console.warn(search);
     const xy = newData;
     const array = [];
     while (xy.length) {
       array.push(xy.splice(0, this.entriesPerPage));
     }
+
     this.setState({ data: array });
   }
 
@@ -220,9 +228,9 @@ class Suppliers extends React.Component {
 
   render() {
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="input-group col-md-6 pull-right">
+      <div className="container-fluid panel panel-default">
+        <div className="row panel-heading">
+          <div className="input-group col-md-12 pull-right">
             <input
               type="text"
               className="form-control"
@@ -230,7 +238,7 @@ class Suppliers extends React.Component {
             />
           </div>
         </div>
-        <div className="row">
+        <div className="row panel-body">
           {/* Where our list is displayed, as well as the source of change in -selected supplier- */}
           <SupplierList
             selected={this.state.selectedIndex}
