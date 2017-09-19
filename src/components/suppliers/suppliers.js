@@ -17,11 +17,18 @@ class Suppliers extends React.Component {
       selectedIndex: -1,
       data: [[]],
       page: 0,
+      fullData: [[]],
     };
     this.focusInput = this.focusInput.bind(this);
     // Data Initialization
     const api = new ComicStockAPI.SuppliersApi();
     api.suppliersGet((error, data) => {
+      this.searchEngine = new JsSearch.Search('name');
+      this.searchEngine.addIndex('city');
+      this.searchEngine.addIndex('reference');
+      this.searchEngine.addDocuments(data);
+      const x = data.slice();
+      this.setState({ fullData: x });
       this.updateData(data);
     });
   }
@@ -142,18 +149,14 @@ class Suppliers extends React.Component {
   searchEngine = null;
 
   updateData(newData) {
-    console.warn(newData);
-    this.searchEngine = new JsSearch.Search('name');
-    this.searchEngine.addIndex('city');
-    this.searchEngine.addIndex('reference');
-    this.searchEngine.addDocuments(newData);
-    console.warn(this.searchEngine.search('awe'));
-    const xy = newData;
+    const xy = newData.slice();
     const array = [];
     while (xy.length) {
       array.push(xy.splice(0, this.entriesPerPage));
     }
-
+    if (array.length === 0) {
+      array.push([]);
+    }
     this.setState({ data: array });
   }
 
@@ -228,11 +231,20 @@ class Suppliers extends React.Component {
     });
   }
 
+  handleSearch(input) {
+    this.setState({ page: 0 });
+    if (input.target.value !== '') {
+      this.updateData(this.searchEngine.search(input.target.value));
+    } else {
+      this.updateData(this.state.fullData);
+    }
+  }
+
   render() {
     return (
       <div className="container-fluid panel panel-default">
         <div className="row panel-heading">
-          <SupplierSearch />
+          <SupplierSearch onSearch={val => this.handleSearch(val)} />
         </div>
         <div className="row panel-body">
           {/* Where our list is displayed, as well as the source of change in -selected supplier- */}
