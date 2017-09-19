@@ -16,7 +16,7 @@ class Navbar extends React.Component {
               <Link to="/order">Place Order</Link>
             </li>
             <li>
-              <Link to="/suppliers">Place Order</Link>
+              <Link to="/suppliers">Suppliers</Link>
             </li>
             {/* <li>
               <Link to="/suppliers/345">Place Order</Link>

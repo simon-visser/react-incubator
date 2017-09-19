@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-
+// NOTE:
+// File is deprecated, don't add to it.
 const PropSupplier = PropTypes.shape({
   id: PropTypes.number,
   name: PropTypes.string,
