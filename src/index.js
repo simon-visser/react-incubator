@@ -14,7 +14,7 @@ import registerServiceWorker from './registerServiceWorker';
 ReactDOM.render(
   <BrowserRouter>
     <App />
-  </BrowserRouter>,awe
+  </BrowserRouter>,
   document.getElementById('root'),
 );
 registerServiceWorker();
